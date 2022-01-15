@@ -32,7 +32,7 @@ end
 
 If you need caching, you can add `config.cache` parameter with `FaradayMiddleware::Caching` [compatible cache store](https://github.com/lostisland/faraday_middleware/wiki/Caching).
 
-Add `config.cache` if you need logging.
+Add `config.logger` if you need logging.
 
 And then you can simply get one of resource binking resource `form`/`bank`/`banks`
 
