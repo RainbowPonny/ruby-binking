@@ -34,6 +34,21 @@ If you need caching, you can add `config.cache` parameter with `FaradayMiddlewar
 
 Add `config.logger` if you need logging.
 
+Also you can provide request options like timeouts or proxy:
+
+```ruby
+Binking.configure do |config|
+  config.api_token = 'my_api_key'
+  config.request_options = {
+    proxy: nil,
+    timeout: nil,
+    open_timeout: nil,
+    read_timeout: nil,
+    write_timeout: nil
+  }
+end
+```
+
 And then you can simply get one of resource binking resource `form`/`bank`/`banks`
 
 ```ruby
