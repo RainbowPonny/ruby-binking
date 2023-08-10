@@ -21,17 +21,11 @@ module Binking
     config.configured?
   end
 
-  def method_missing(method_name, *args, &block)
-    if %i[form bank banks].include?(method_name)
+  %i[form bank banks].each do |resource_name|
+    define_singleton_method(resource_name) do |*args| 
       raise NotConfiguredError unless configured?
 
-      RequestResource.get(method_name, *args)
-    else
-      super
+      RequestResource.get(resource_name, *args)
     end
-  end
-
-  def respond_to_missing?(method_name, include_private = false)
-    connection.respond_to?(method_name) || super
   end
 end
