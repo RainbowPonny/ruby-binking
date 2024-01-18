@@ -1,22 +1,23 @@
 # frozen_string_literal: true
 
 require "faraday"
-require "faraday_middleware"
 
 module Binking
   class Client
-    attr_accessor :api_token, :host, :sandbox, :cache, :logger, :options
+    attr_accessor :api_token, :host, :sandbox, :cache, :cache_expires_in, :logger, :options
 
     def initialize(api_token: Binking.config.api_token,
                    host: Binking.config.host,
                    sandbox: Binking.config.sandbox,
                    cache: Binking.config.cache,
+                   cache_expires_in: Binking.config.cache_expires_in,
                    logger: Binking.config.logger,
                    options: Binking.config.request_options)
       @api_token = api_token
       @host = host
       @sandbox = sandbox
       @cache = cache
+      @cache_expires_in = cache_expires_in
       @logger = logger
       @options = options
     end
@@ -32,7 +33,11 @@ module Binking
 
     def connection
       @connection ||= Faraday.new(host, request: options) do |builder|
-        builder.use(FaradayMiddleware::Caching, cache) if cache
+        builder.use(
+          CacheMiddalware,
+          cache,
+          expires_in: cache_expires_in
+        ) if cache
         builder.use Faraday::Response::RaiseError
         builder.request :url_encoded
         builder.response :json

@@ -2,6 +2,7 @@
 
 require_relative "binking/version"
 require "binking/config"
+require "binking/cache_middalware"
 require "binking/client"
 require "binking/fields"
 require "binking/request_resource"
@@ -22,7 +23,7 @@ module Binking
   end
 
   %i[form bank banks].each do |resource_name|
-    define_singleton_method(resource_name) do |*args| 
+    define_singleton_method(resource_name) do |*args|
       raise NotConfiguredError unless configured?
 
       RequestResource.get(resource_name, *args)

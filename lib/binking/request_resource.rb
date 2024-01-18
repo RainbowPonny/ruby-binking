@@ -16,9 +16,11 @@ module Binking
       params[RESOURCES_KEYS[resource.to_s]] = value
       params[:fields] = fields.join(",") unless fields.empty?
 
-      Client.new(sandbox: sandbox)
-            .get("/#{resource}", params)
-            .body
+      response = Client.new(sandbox: sandbox).get("/#{resource}", params)
+
+      return {} if response.body == 'null'
+
+      response.body
     end
   end
 end
